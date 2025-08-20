@@ -2,6 +2,7 @@ public class User {
     protected String name;
     protected String email;
     protected String phoneNumber;
+    protected IOOperation[] operations;
     
     public User() {
         // Default constructor
@@ -31,5 +32,8 @@ public class User {
     
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void menu() {
     }
 }

@@ -11,7 +11,7 @@ public class Main {
         System.out.println("Welcome to Library Mangement System!");
 
         int chioce;
-        do {
+        // do {
             System.out.println("====================================");
             System.out.println("Please choose an option:");
             System.out.println("1. login");
@@ -24,14 +24,12 @@ public class Main {
 
             switch (chioce) {
                 case 1:
-                    logIn();                    
+                    logIn();  
                 case 2:
-                    newUser();                    
+                    newUser();  
             }
-        } while (chioce != 3);
+        // } while (chioce != 3);
         System.out.println("Thank you for using the Library Management System!");
-        System.out.println("Goodbye!");
-        scanner.close();
     }
 
     private static void logIn() {
@@ -42,14 +40,12 @@ public class Main {
         int userId = database.logIn(phoneNumber, email);
         if (userId != -1) {
             User user = database.getUser(userId);
-            System.out.println("******************************************");
             System.out.println("Login successful!");
+            user.menu();
+            System.out.println("====================================");
             System.out.println("Welcome " + user.getName() + "!");
-
         } else {
-            System.out.println("Login failed. Please check your credentials.");
-            return ;
-
+            System.out.println("Login failed. User does not exist.");
         }
     }
 
@@ -62,18 +58,16 @@ public class Main {
         String email = scanner.next();
         System.out.println("1. Admin \n2. Normal User");
         int users = scanner.nextInt();
-
+        User user;
         if (users == 1) {
-            User admin = new Admin(name, email, phoneNumber);
-            database.addUser(admin);
-            
+            user= new Admin(name, email, phoneNumber);            
         } else {
-            User user = new User(name, email, phoneNumber);
-            database.addUser(user);
+            user = new NormalUser(name, email, phoneNumber);
             
         }
-        System.out.println("User created successfully!");
-        System.out.println("===========================");
+        database.addUser(user);
+        user.menu();
+        
     }
 
 }

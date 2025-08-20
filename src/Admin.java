@@ -1,33 +1,42 @@
+import java.util.Scanner;
+
 public class Admin extends User {
-    // private String adminId;
-    // private String adminPassword;
 
-    // public Admin(String name, String email, String phoneNumber, String adminId, String adminPassword) {
-    //     super(name, email, phoneNumber);
-    //     this.adminId = adminId;
-    //     this.adminPassword = adminPassword;
-    // }
-
-    // public String getAdminId() {
-    //     return adminId;
-    // }
-
-    // public void setAdminId(String adminId) {
-    //     this.adminId = adminId;
-    // }
-
-    // public String getAdminPassword() {
-    //     return adminPassword;
-    // }
-
-    // public void setAdminPassword(String adminPassword) {
-    //     this.adminPassword = adminPassword;
-    // }
     public Admin(String name) {
         super(name);
-        // Default constructor
+        this.operations = new IOOperation[] {
+                new ViewBooks(),
+                new AddBook(),
+                new DeleteBook(),
+                new Search(),
+                new DeleteAllData(),
+                new ViewOrder(),
+                new Exit()
+        };
     }
+
     public Admin(String name, String email, String phoneNumber) {
         super(name, email, phoneNumber);
+        this.operations = new IOOperation[] {
+                new AddBook()
+        };
     }
+
+    @Override
+    public void menu() {
+        System.out.println("***********************************");
+        System.out.println("Welcome to the Admin Menu");
+        System.out.println("1. View Books");
+        System.out.println("2. Add Book");
+        System.out.println("3. Delete Book");
+        System.out.println("4. Search");
+        System.out.println("5. Delete all data");
+        System.out.println("6. View Orders");
+        System.out.println("7. Exit");
+        
+        Scanner scanner = new Scanner(System.in);
+        int choice = scanner.nextInt();
+        this.operations[choice - 1].oper();
+    }
+    
 }
