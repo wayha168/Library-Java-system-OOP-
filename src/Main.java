@@ -17,17 +17,16 @@ public class Main {
             System.out.println("1. login");
             System.out.println("2/ New User");
             System.out.println("3. Exit");
+            System.out.println("====================================");
 
             scanner = new Scanner(System.in);
             chioce = scanner.nextInt();
 
             switch (chioce) {
                 case 1:
-                    logIn();
-                    
+                    logIn();                    
                 case 2:
-                    newUser();
-                    
+                    newUser();                    
             }
         } while (chioce != 3);
         System.out.println("Thank you for using the Library Management System!");
