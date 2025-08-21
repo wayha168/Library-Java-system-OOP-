@@ -18,12 +18,18 @@ public class Admin extends User {
     public Admin(String name, String email, String phoneNumber) {
         super(name, email, phoneNumber);
         this.operations = new IOOperation[] {
-                new AddBook()
+                new ViewBooks(),
+                new AddBook(),
+                new DeleteBook(),
+                new Search(),
+                new DeleteAllData(),
+                new ViewOrder(),
+                new Exit()
         };
     }
 
     @Override
-    public void menu() {
+    public void menu(Database database, User user) {
         System.out.println("***********************************");
         System.out.println("Welcome to the Admin Menu");
         System.out.println("1. View Books");
@@ -36,7 +42,8 @@ public class Admin extends User {
         
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
-        this.operations[choice - 1].oper();
+        this.operations[choice - 1].oper(database, user);
+        scanner.close();
     }
-    
+
 }

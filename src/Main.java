@@ -29,7 +29,7 @@ public class Main {
                     newUser();  
             }
         // } while (chioce != 3);
-        System.out.println("Thank you for using the Library Management System!");
+        // System.out.println("Thank you for using the Library Management System!");
     }
 
     private static void logIn() {
@@ -41,7 +41,7 @@ public class Main {
         if (userId != -1) {
             User user = database.getUser(userId);
             System.out.println("Login successful!");
-            user.menu();
+            user.menu(database, user);
             System.out.println("====================================");
             System.out.println("Welcome " + user.getName() + "!");
         } else {
@@ -62,12 +62,10 @@ public class Main {
         if (users == 1) {
             user= new Admin(name, email, phoneNumber);            
         } else {
-            user = new NormalUser(name, email, phoneNumber);
-            
+            user = new NormalUser(name, email, phoneNumber); 
         }
         database.addUser(user);
-        user.menu();
-        
+        user.menu(database, user);
     }
 
 }

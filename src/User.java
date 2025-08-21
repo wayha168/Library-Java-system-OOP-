@@ -1,4 +1,4 @@
-public class User {
+public abstract class User {
     protected String name;
     protected String email;
     protected String phoneNumber;
@@ -34,6 +34,5 @@ public class User {
         this.name = name;
     }
 
-    public void menu() {
-    }
+    abstract public void menu(Database database, User user);
 }
