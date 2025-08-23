@@ -27,7 +27,7 @@ public class NormalUser extends User {
         };
     }
 
- @Override
+  @Override
      public void menu(Database database, User user) {
         System.out.println("***********************************");
         System.out.println("Welcome to Menu!");
