@@ -34,5 +34,11 @@ public abstract class User {
         this.name = name;
     }
 
+    abstract public String toString();
+    // {
+    //     String text = name + "<N/>" + email + "<N/>" + phoneNumber + "<N/>";
+    //     return text;
+    // }   
+
     abstract public void menu(Database database, User user);
 }
