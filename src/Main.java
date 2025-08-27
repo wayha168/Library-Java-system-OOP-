@@ -25,29 +25,52 @@ public class Main {
             switch (chioce) {
                 case 1:
                     logIn();  
+                    break;
                 case 2:
                     newUser();  
+                    break;
             }
         // } while (chioce != 3);
         // System.out.println("Thank you for using the Library Management System!");
     }
 
     private static void logIn() {
-        System.out.println("Enter phone Number:");
-        String phoneNumber = scanner.next();
-        System.out.println("Enter your Email:");
-        String email = scanner.next();
-        int userId = database.logIn(phoneNumber, email);
-        if (userId != -1) {
-            User user = database.getUser(userId);
-            System.out.println("Login successful!");
-            user.menu(database, user);
-            System.out.println("====================================");
-            System.out.println("Welcome " + user.getName() + "!");
-        } else {
-            System.out.println("Login failed. User does not exist.");
+        boolean success = false;
+        while (!success) {
+            System.out.println("Enter phone Number:");
+            String phoneNumber = scanner.next();
+            System.out.println("Enter your Email:");
+            String email = scanner.next();
+            int userId = database.logIn(phoneNumber, email);
+            if (userId != -1) {
+                User user = database.getUser(userId);
+                System.out.println("Login successful!");
+                user.menu(database, user);
+                System.out.println("====================================");
+                System.out.println("Welcome " + user.getName() + "!");
+                success = true;
+            } else {
+                System.out.println("Login failed. User does not exist.");
+                System.out.println("Please try again.");
+            }
         }
     }
+    // private static void logIn() {
+    //     System.out.println("Enter phone Number:");
+    //     String phoneNumber = scanner.next();
+    //     System.out.println("Enter your Email:");
+    //     String email = scanner.next();
+    //     int userId = database.logIn(phoneNumber, email);
+    //     if (userId != -1) {
+    //         User user = database.getUser(userId);
+    //         System.out.println("Login successful!");
+    //         user.menu(database, user);
+    //         System.out.println("====================================");
+    //         System.out.println("Welcome " + user.getName() + "!");
+    //     } else {
+    //         System.out.println("Login failed. User does not exist.");
+    //     }
+    // }
 
     private static void newUser() {
         System.out.println("Enter name:");

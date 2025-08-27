@@ -117,4 +117,28 @@ public class Book {
         this.brwcopies = brwcopies;
     }
 
+    public String toString2(){
+    String text = name + "<N/>" + author + "<N/>" + publisher + 
+                "<N/>" + address +
+                "<N/>" + status +
+                "<N/>" + String.valueOf(qty) +
+                "<N/>" + String.valueOf(price) +
+                "<N/>" + String.valueOf(brwcopies);
+        return text;
+    }
+
+    public Book parseBook(String data) {
+        String[] fields = data.split("<N/>");
+        Book book = new Book();
+        book.setName(fields[0]);
+        book.setAuthor(fields[1]);
+        book.setPublisher(fields[2]);
+        book.setAddress(fields[3]);
+        book.setStatus(fields[4]);
+        book.setQty(Integer.parseInt(fields[5]));
+        book.setPrice(Double.parseDouble(fields[6]));
+        book.setBrwcopies(Integer.parseInt(fields[7]));
+        return book;
+    }
+
 }

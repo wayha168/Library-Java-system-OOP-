@@ -11,22 +11,40 @@ public class Database {
     private ArrayList<Book> books = new ArrayList<Book>();
     private ArrayList<String> booknames = new ArrayList<String>();
 
-    private File userfile = new File("//data/Users");
-    private File bookfile = new File("//data/Books");
+    private File dataDir = new File("Data");
+    private File userfile = new File(dataDir, "Users");
+    private File bookfile = new File(dataDir, "Books");
+
     // private File userfile = new
     // File(Main.class.getClassLoader().getResource("//data/Users").getFile());
     // private File bookfile = new
     // File(Main.class.getClassLoader().getResource("//data/Books").getFile());
 
     public Database() {
-        if (!userfile.exists()) {
-            userfile.mkdirs();
+        // Create "data" directory if it doesn't exist
+        if (!dataDir.exists()) {
+            dataDir.mkdirs();
         }
-        if (!bookfile.exists()) {
-            bookfile.mkdirs();
+        try {
+            if (!userfile.exists())
+                userfile.createNewFile();
+            if (!bookfile.exists())
+                bookfile.createNewFile();
+        } catch (Exception e) {
+            System.err.println("Error creating data files: " + e.toString());
         }
         getUsers();
     }
+
+    // public Database() {
+    // if (!userfile.exists()) {
+    // userfile.mkdirs();
+    // }
+    // if (!bookfile.exists()) {
+    // bookfile.mkdirs();
+    // }
+    // getUsers();
+    // }
 
     public void addUser(User user) {
         users.add(user);
@@ -37,7 +55,7 @@ public class Database {
     public int logIn(String phoneNumber, String email) {
         int found = -1;
         for (User user : users) {
-            if (user.getPhoneNumber().matches(phoneNumber) && user.getEmail().matches(email)) {
+            if (user.getPhoneNumber().equals(phoneNumber) && user.getEmail().equals(email)) {
                 System.out.println("Login successful for: " + user.getName());
                 found = users.indexOf(user);
                 break;
@@ -56,6 +74,7 @@ public class Database {
     public void addBook(Book book) {
         books.add(book);
         booknames.add(book.getName());
+        saveBooks();
     }
 
     private void getUsers() {
@@ -71,9 +90,9 @@ public class Database {
             System.err.println("Error reading user file: " + e.toString());
         }
 
-        if (text1.matches("") || !text1.isEmpty()) {
+        if (!text1.matches("") || !text1.isEmpty()) {
             String[] usersData = text1.split("<NewUser/>\n");
-            for (String  userData : usersData) {
+            for (String userData : usersData) {
                 String[] fields = userData.split("<N/>");
                 if (fields.length >= 4) {
                     String name = fields[0];
@@ -84,11 +103,12 @@ public class Database {
                     User user;
                     if (userType.matches("Admin")) {
                         user = new Admin(name, email, phoneNumber);
-                        
+                        username.add(user.getName());
                     } else {
                         user = new NormalUser(name, email, phoneNumber);
+                        username.add(user.getName());
                     }
-                    addUser(user);
+                    // addUser(user);
                 }
             }
         }
@@ -106,5 +126,60 @@ public class Database {
         } catch (Exception e) {
             System.err.println("Error writing user file: " + e.toString());
         }
+    }
+
+    private void saveBooks() {
+        String text1 = "";
+        for (Book book : books) {
+            text1 += text1 + book.toString() + "<NewBook/>\n";
+        }
+        try {
+            PrintWriter writer = new PrintWriter(bookfile);
+            writer.print(text1);
+            writer.close();
+        } catch (Exception e) {
+            System.err.println("Error writing user file: " + e.toString());
+        }
+    }
+
+    private void getBooks() {
+        String text1 = "";
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(bookfile));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                text1 = text1 + line + "\n";
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.err.println(e.toString());
+        }
+
+        if (!text1.matches("") || !text1.isEmpty()) {
+            String[] bookData = text1.split("<NewBook/>\n");
+            for (String bookDetails : bookData) {
+                Book book = parseBook(bookDetails);
+                if (book != null) {
+                    books.add(book);     
+                    booknames.add(book.getName());     
+                }  else {
+                    System.err.println("Error parsing book data: " + bookDetails);      
+                }
+            }
+        }
+    }
+
+    public Book parseBook(String data) {
+        String[] fields = data.split("<N/>");
+        Book book = new Book();
+        book.setName(fields[0]);
+        book.setAuthor(fields[1]);
+        book.setPublisher(fields[2]);
+        book.setAddress(fields[3]);
+        book.setStatus(fields[4]);
+        book.setQty(Integer.parseInt(fields[5]));
+        book.setPrice(Double.parseDouble(fields[6]));
+        book.setBrwcopies(Integer.parseInt(fields[7]));
+        return book;
     }
 }
