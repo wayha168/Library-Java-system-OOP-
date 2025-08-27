@@ -9,14 +9,13 @@ public class ViewBooks implements IOOperation {
             System.out.println("No books available.");
             return;
         }
-        System.out.println("Name\tAuthor\tPublisher\tAddress\tStatus\tQty\tPrice\tBrw Copies");
+        System.out.println("Name\t\tAuthor\t\tPublisher\tAddress\tQty\tPrice\tBrw Copies");
         for (Book book : books) {
             System.out.println(
-                    book.getName() + "\t" +
-                    book.getAuthor() + "\t" +
-                    book.getPublisher() + "\t" +
+                    book.getName() + "\t\t" +
+                    book.getAuthor() + "\t\t" +
+                    book.getPublisher() + "\t\t" +
                     book.getAddress() + "\t" +
-                    book.getStatus() + "\t" +
                     book.getQty() + "\t" +
                     book.getPrice() + "\t" +
                     book.getBrwcopies());
