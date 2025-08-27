@@ -60,7 +60,7 @@ public class Database {
     public int logIn(String phoneNumber, String email) {
         int found = -1;
         for (User user : users) {
-            if (user.getPhoneNumber().equals(phoneNumber) && user.getEmail().equals(email)) {
+            if (user.getPhoneNumber().matches(phoneNumber) && user.getEmail().matches(email)) {
                 System.out.println("Login successful for: " + user.getName());
                 found = users.indexOf(user);
                 break;
@@ -88,7 +88,7 @@ public class Database {
             BufferedReader reader = new BufferedReader(new FileReader(userfile));
             String line;
             while ((line = reader.readLine()) != null) {
-                text1 = text1 + line + "\n";
+                text1 += line + "\n";
             }
             reader.close();
         } catch (Exception e) {
@@ -106,7 +106,7 @@ public class Database {
                     String userType = fields[3];
 
                     User user;
-                    if (userType.equals("Admin")) {
+                    if (userType.equalsIgnoreCase("Admin")) {
                         user = new Admin(name, email, phoneNumber);
                         // username.add(user.getName());
                     } else {
@@ -115,7 +115,7 @@ public class Database {
                     }
                     users.add(user);
                     username.add(user.getName());
-                    // addUser(user);
+    
                 }
             }
         }
@@ -124,7 +124,7 @@ public class Database {
     private void saveUsers() {
         String text1 = "";
         for (User user : users) {
-            text1 += text1 + user.toString() + "<0/>\n";
+            text1 = text1 + user.toString() + "<0/>\n";
         }
         try {
             PrintWriter writer = new PrintWriter(userfile);

@@ -46,6 +46,12 @@ public class Main {
         if (userId != -1) {
             User user = database.getUser(userId);
             System.out.println("Welcome " + user.getName() + "!");
+            // Check user type
+        if (user instanceof Admin) {
+            System.out.println("You are logged in as Admin.");
+        } else if (user instanceof NormalUser) {
+            System.out.println("You are logged in as Normal User.");
+        }
             System.out.println("====================================");
             user.menu(database, user);
 

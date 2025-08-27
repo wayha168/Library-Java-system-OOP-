@@ -20,6 +20,8 @@ public class ViewBooks implements IOOperation {
                     book.getPrice() + "\t" +
                     book.getBrwcopies());
         }
-    }
 
+        System.out.println();
+        user.menu(database, user);
+    }
 }
