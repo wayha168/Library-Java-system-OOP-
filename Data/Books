@@ -1,1 +1,1 @@
- Book { name = 'book1', Author = 'author1', Publisher = 'vv', Address = '11', Status = 'good', Qty = 12, Price = 10.0, Borrowing Copies = 1}<NewBook/>
+book1<N/>author2<N/>01221<N/>pp<N/>pp<N/>12<N/>10.0<N/>1<NewBook/>

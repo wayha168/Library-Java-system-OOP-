@@ -13,7 +13,7 @@ public class Database {
 
     private File dataDir = new File("Data");
     private File userfile = new File(dataDir, "Users");
-    private File bookfile = new File(dataDir, "Books");
+    private File booksfile = new File(dataDir, "Books");
 
     // private File userfile = new
     // File(Main.class.getClassLoader().getResource("//data/Users").getFile());
@@ -25,15 +25,20 @@ public class Database {
         if (!dataDir.exists()) {
             dataDir.mkdirs();
         }
-        try {
-            if (!userfile.exists())
+        if (!userfile.exists()) {
+            try {
                 userfile.createNewFile();
-            if (!bookfile.exists())
-                bookfile.createNewFile();
-        } catch (Exception e) {
-            System.err.println("Error creating data files: " + e.toString());
+            } catch (Exception e) {
+            }
+        }
+        if (!booksfile.exists()) {
+            try {
+                booksfile.createNewFile();
+            } catch (Exception e) {
+            }
         }
         getUsers();
+        getBooks();
     }
 
     // public Database() {
@@ -61,7 +66,7 @@ public class Database {
                 break;
             }
         }
-        if (found != -1) {
+        if (found == -1) {
             System.out.println("Login failed. User not found.");
         }
         return found;
@@ -83,14 +88,14 @@ public class Database {
             BufferedReader reader = new BufferedReader(new FileReader(userfile));
             String line;
             while ((line = reader.readLine()) != null) {
-                text1 += line + "\n";
+                text1 = text1 + line + "\n";
             }
             reader.close();
         } catch (Exception e) {
             System.err.println("Error reading user file: " + e.toString());
         }
 
-        if (!text1.matches("") || !text1.isEmpty()) {
+        if (!text1.isEmpty()) {
             String[] usersData = text1.split("<NewUser/>\n");
             for (String userData : usersData) {
                 String[] fields = userData.split("<N/>");
@@ -101,13 +106,15 @@ public class Database {
                     String userType = fields[3];
 
                     User user;
-                    if (userType.matches("Admin")) {
+                    if (userType.equals("Admin")) {
                         user = new Admin(name, email, phoneNumber);
-                        username.add(user.getName());
+                        // username.add(user.getName());
                     } else {
                         user = new NormalUser(name, email, phoneNumber);
-                        username.add(user.getName());
+                        // username.add(user.getName());
                     }
+                    users.add(user);
+                    username.add(user.getName());
                     // addUser(user);
                 }
             }
@@ -117,7 +124,7 @@ public class Database {
     private void saveUsers() {
         String text1 = "";
         for (User user : users) {
-            text1 += text1 + user.toString() + "<NewUser/>\n";
+            text1 += text1 + user.toString() + "<0/>\n";
         }
         try {
             PrintWriter writer = new PrintWriter(userfile);
@@ -131,21 +138,28 @@ public class Database {
     private void saveBooks() {
         String text1 = "";
         for (Book book : books) {
-            text1 += text1 + book.toString() + "<NewBook/>\n";
+            text1 += book.getName() + "<N/>"
+                    + book.getAuthor() + "<N/>"
+                    + book.getPublisher() + "<N/>"
+                    + book.getAddress() + "<N/>"
+                    + book.getStatus() + "<N/>"
+                    + book.getQty() + "<N/>"
+                    + book.getPrice() + "<N/>"
+                    + book.getBrwcopies() + "<NewBook/>\n";
         }
         try {
-            PrintWriter writer = new PrintWriter(bookfile);
+            PrintWriter writer = new PrintWriter(booksfile);
             writer.print(text1);
             writer.close();
         } catch (Exception e) {
-            System.err.println("Error writing user file: " + e.toString());
+            System.err.println(e.toString());
         }
     }
 
     private void getBooks() {
         String text1 = "";
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(bookfile));
+            BufferedReader reader = new BufferedReader(new FileReader(booksfile));
             String line;
             while ((line = reader.readLine()) != null) {
                 text1 = text1 + line + "\n";
@@ -155,15 +169,15 @@ public class Database {
             System.err.println(e.toString());
         }
 
-        if (!text1.matches("") || !text1.isEmpty()) {
+        if (!text1.isEmpty()) {
             String[] bookData = text1.split("<NewBook/>\n");
             for (String bookDetails : bookData) {
                 Book book = parseBook(bookDetails);
-                if (book != null) {
-                    books.add(book);     
-                    booknames.add(book.getName());     
-                }  else {
-                    System.err.println("Error parsing book data: " + bookDetails);      
+                if (book != null) { // <-- fix: only add valid books
+                    books.add(book);
+                    booknames.add(book.getName());
+                } else {
+                    System.err.println("Error parsing book data: " + bookDetails);
                 }
             }
         }
@@ -171,6 +185,11 @@ public class Database {
 
     public Book parseBook(String data) {
         String[] fields = data.split("<N/>");
+        if (fields.length < 8) {
+            System.err.println("Error: Book data format invalid: " + data);
+            return null;
+        }
+
         Book book = new Book();
         book.setName(fields[0]);
         book.setAuthor(fields[1]);
@@ -181,5 +200,9 @@ public class Database {
         book.setPrice(Double.parseDouble(fields[6]));
         book.setBrwcopies(Integer.parseInt(fields[7]));
         return book;
+    }
+
+    public ArrayList<Book> getAllBooks() {
+        return books;
     }
 }

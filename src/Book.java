@@ -117,8 +117,9 @@ public class Book {
         this.brwcopies = brwcopies;
     }
 
-    public String toString2(){
-    String text = name + "<N/>" + author + "<N/>" + publisher + 
+    public String toString2() {
+    String text = name + "<N/>" + author + 
+                "<N/>" + publisher + 
                 "<N/>" + address +
                 "<N/>" + status +
                 "<N/>" + String.valueOf(qty) +

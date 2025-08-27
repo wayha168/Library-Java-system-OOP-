@@ -24,8 +24,10 @@ public class AddBook implements IOOperation {
         book.setPrice(scanner.nextDouble());
         System.out.println("Enter borrowing copies:");
         book.setBrwcopies(scanner.nextInt());
-        scanner.close();
         database.addBook(book);
         System.out.println("Book added successfully!");
+
+        user.menu(database, user);
+        scanner.close();
     }
 }
