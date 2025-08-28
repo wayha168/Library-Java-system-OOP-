@@ -95,7 +95,7 @@ public class Database {
             System.err.println("Error reading user file: " + e.toString());
         }
 
-        if (!text1.isEmpty()) {
+        if (!text1.isEmpty() || !text1.matches("")) {
             String[] usersData = text1.split("<NewUser/>\n");
             for (String userData : usersData) {
                 String[] fields = userData.split("<N/>");
@@ -115,7 +115,7 @@ public class Database {
                     }
                     users.add(user);
                     username.add(user.getName());
-    
+
                 }
             }
         }
@@ -124,7 +124,11 @@ public class Database {
     private void saveUsers() {
         String text1 = "";
         for (User user : users) {
-            text1 = text1 + user.toString() + "<0/>\n";
+            String userType = (user instanceof Admin) ? "Admin" : "NormalUser";
+            text1 += user.getName() + "<N/>"
+                    + user.getEmail() + "<N/>"
+                    + user.getPhoneNumber() + "<N/>"
+                    + userType + "<NewUser/>\n";
         }
         try {
             PrintWriter writer = new PrintWriter(userfile);
@@ -205,4 +209,5 @@ public class Database {
     public ArrayList<Book> getAllBooks() {
         return books;
     }
+
 }

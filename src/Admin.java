@@ -39,6 +39,7 @@ public class Admin extends User {
         System.out.println("5. Delete all data");
         System.out.println("6. View Orders");
         System.out.println("7. Exit");
+        System.out.println("***********************************");
 
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
@@ -47,6 +48,6 @@ public class Admin extends User {
     }
 
     public String toString() {
-        return name + "<N/>" + email + "<N/>" + phoneNumber + "<N/>" + "Admin" ;
+        return name + "<N/>" + email + "<N/>" + phoneNumber + "<N/>" + "Admin";
     }
 }

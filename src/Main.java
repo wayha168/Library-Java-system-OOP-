@@ -49,8 +49,10 @@ public class Main {
             // Check user type
         if (user instanceof Admin) {
             System.out.println("You are logged in as Admin.");
+            ((Admin) user).menu(database, user);
         } else if (user instanceof NormalUser) {
             System.out.println("You are logged in as Normal User.");
+            ((NormalUser) user).menu(database, user);
         }
             System.out.println("====================================");
             user.menu(database, user);
