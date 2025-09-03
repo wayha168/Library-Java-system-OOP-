@@ -118,12 +118,12 @@ public class Book {
     }
 
     public String toString2() {
-    String text = name + "<N/>" + author + 
-                "<N/>" + publisher + 
-                "<N/>" + address +
-                "<N/>" + status +
-                "<N/>" + String.valueOf(qty) +
-                "<N/>" + String.valueOf(price) +
+    String text = name + "<N/>" + author + "\n" +
+                "<N/>" + publisher + "\n" +
+                "<N/>" + address + "\n" +
+                "<N/>" + status + "\n" +
+                "<N/>" + String.valueOf(qty) + "\n" +
+                "<N/>" + String.valueOf(price) + "\n" +
                 "<N/>" + String.valueOf(brwcopies);
         return text;
     }

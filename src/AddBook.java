@@ -9,9 +9,17 @@ public class AddBook implements IOOperation {
         Book book = new Book();
 
         System.out.println("Enter book name:");
-        book.setName(scanner.next());
+        String name = scanner.next();
+        if (database.getBook(name) > -1) {
+            System.out.println("Book already exists.");
+            user.menu(database, user);
+            scanner.close();
+            return;
+        } else {
+            book.setName(name);
+        }
         System.out.println("Enter author name:");
-        book.setAuthor(scanner.next()); 
+        book.setAuthor(scanner.next());
         System.out.println("Enter publisher name:");
         book.setPublisher(scanner.next());
         System.out.println("Enter collection address:");

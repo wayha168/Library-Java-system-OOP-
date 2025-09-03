@@ -210,4 +210,27 @@ public class Database {
         return books;
     }
 
+    public int getBook(String bookName) {
+        int found = -1;
+        for (Book book : books) {
+            if (book.getName().matches(bookName)) {
+                found = books.indexOf(book);
+            }
+        }
+        return found;
+    }
+
+    public Book getBook(int i) {
+       return books.get(i);
+    }
+
+    public void deleteBook(int bookId) {
+        if (bookId >= 0 && bookId < books.size()) {
+            books.remove(bookId);
+            booknames.remove(bookId);
+            saveBooks();
+        } else {
+            System.out.println("Invalid book ID.");
+        }
+    }
 }
