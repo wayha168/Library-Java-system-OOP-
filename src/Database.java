@@ -10,10 +10,12 @@ public class Database {
     private ArrayList<String> username = new ArrayList<String>();
     private ArrayList<Book> books = new ArrayList<Book>();
     private ArrayList<String> booknames = new ArrayList<String>();
+    private ArrayList<Order> orders = new ArrayList<Order>();
 
     private File dataDir = new File("Data");
     private File userfile = new File(dataDir, "Users");
     private File booksfile = new File(dataDir, "Books");
+    private File ordersfile = new File(dataDir, "Orders");
 
     // private File userfile = new
     // File(Main.class.getClassLoader().getResource("//data/Users").getFile());
@@ -37,8 +39,15 @@ public class Database {
             } catch (Exception e) {
             }
         }
+        if (!ordersfile.exists()) {
+            try {
+                ordersfile.createNewFile();
+            } catch (Exception e) {
+            }
+        }
         getUsers();
         getBooks();
+        getOrders();
     }
 
     // public Database() {
@@ -221,7 +230,7 @@ public class Database {
     }
 
     public Book getBook(int i) {
-       return books.get(i);
+        return books.get(i);
     }
 
     public void deleteBook(int bookId) {
@@ -232,5 +241,102 @@ public class Database {
         } else {
             System.out.println("Invalid book ID.");
         }
+    }
+
+    public void deleteAllData() {
+        if (userfile.exists()) {
+            try {
+                userfile.delete();
+                userfile.createNewFile();
+            } catch (Exception e) {
+            }
+        }
+        if (booksfile.exists()) {
+            try {
+                booksfile.delete();
+                booksfile.createNewFile();
+            } catch (Exception e) {
+            }
+        }
+        if (ordersfile.exists()) {
+            try {
+                ordersfile.delete();
+                ordersfile.createNewFile();
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    public void addOrder(Order order, Book book, int bookIndex) {
+        orders.add(order);
+        books.set(bookIndex, book);
+        saveOrder();
+    }
+
+    private void saveOrder() {
+        String text1 = "";
+        for (Order order : orders) {
+            text1 = text1 + order.toString() + "<NewOrder/>\n";
+        }
+        try {
+            PrintWriter writer = new PrintWriter(ordersfile);
+            writer.print(text1);
+            writer.close();
+        } catch (Exception e) {
+            System.err.println(e.toString());
+        }
+    }
+
+    private void getOrders() {
+        String text1 = "";
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(ordersfile));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                text1 += line + "\n";
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.err.println(e.toString());
+        }
+
+        if (!text1.isEmpty() || !text1.matches("")) {
+            String[] data = text1.split("<NewUser/>\n");
+            for (String orderData : data) {
+                Order order = parseOrder(orderData);
+                if (order != null) {
+                    orders.add(order);
+                } else {
+                    System.err.println("Error parsing order data: " + orderData);
+                }
+            }
+        }
+    }
+
+    private User getUserByName(String name) {
+        User u = new NormalUser("");
+        for (User user : users) {
+            if (user.getName().matches(name)) {
+                u = user;
+                break;
+            }
+        }
+        return u; // Return null if no matching user is found
+    }
+
+    private Order parseOrder(String data) {
+        String[] fields = data.split("<N/>");
+        if (fields.length < 4) {
+            System.err.println("Error: Order data format invalid: " + data);
+            return null;
+        }
+        Order order = new Order(books.get(getBook(fields[0])),
+                getUserByName(fields[1]), Double.parseDouble(fields[2]),
+                Integer.parseInt(fields[3]));
+        return order;
+    }
+
+    public ArrayList<Order> getAllOrders() {
+        return orders;
     }
 }
