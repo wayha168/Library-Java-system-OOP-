@@ -12,7 +12,6 @@ public class PlaceOrder implements IOOperation {
         int i = database.getBook(bookName);
         if (i <= -1) {
             System.out.println("Book not found");
-            return;
         } else {
             Book book = database.getBook(i);
             order.setBook(book);
@@ -22,10 +21,11 @@ public class PlaceOrder implements IOOperation {
             order.setQty(qty);
             order.setPrice(book.getPrice() * qty);
             int bookIndex = database.getBook(book.getName());
-            book.setQty(book.getQty() - 1);
+            book.setQty(book.getQty() - qty);
             database.addOrder(order, book, bookIndex);
             System.out.println("Order placed successfully!\n");
         }
         user.menu(database, user);
+        scanner.close();
     }
 }

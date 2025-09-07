@@ -270,20 +270,22 @@ public class Database {
     public void addOrder(Order order, Book book, int bookIndex) {
         orders.add(order);
         books.set(bookIndex, book);
-        saveOrder();
+        saveOrders();
+        saveBooks();
     }
 
-    private void saveOrder() {
+    private void saveOrders() {
         String text1 = "";
         for (Order order : orders) {
-            text1 = text1 + order.toString() + "<NewOrder/>\n";
+            text1 += order.getBook().getName() + "<N/>"
+                    + order.getUser().getName() + "<N/>"
+                    + order.getPrice() + "<N/>"
+                    + order.getQty() + "<NewOrder/>\n";
         }
-        try {
-            PrintWriter writer = new PrintWriter(ordersfile);
+        try (PrintWriter writer = new PrintWriter(ordersfile)) {
             writer.print(text1);
-            writer.close();
         } catch (Exception e) {
-            System.err.println(e.toString());
+            System.err.println("Error writing orders file: " + e);
         }
     }
 
@@ -301,7 +303,7 @@ public class Database {
         }
 
         if (!text1.isEmpty() || !text1.matches("")) {
-            String[] data = text1.split("<NewUser/>\n");
+            String[] data = text1.split("<NewOrder/>\n");
             for (String orderData : data) {
                 Order order = parseOrder(orderData);
                 if (order != null) {
@@ -316,12 +318,12 @@ public class Database {
     private User getUserByName(String name) {
         User u = new NormalUser("");
         for (User user : users) {
-            if (user.getName().matches(name)) {
+            if (user.getName().equalsIgnoreCase(name)) {
                 u = user;
                 break;
             }
         }
-        return u; // Return null if no matching user is found
+        return u;
     }
 
     private Order parseOrder(String data) {

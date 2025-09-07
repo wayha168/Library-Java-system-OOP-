@@ -17,6 +17,7 @@ public class DeleteBook implements IOOperation {
         }
 
         user.menu(database, user);
+        scanner.close();
     }
     
 }
