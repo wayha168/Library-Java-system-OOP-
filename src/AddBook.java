@@ -36,6 +36,6 @@ public class AddBook implements IOOperation {
         System.out.println("Book added successfully!");
 
         user.menu(database, user);
-        scanner.close();
+        
     }
 }
