@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
 public class Borrowing {
 
@@ -7,15 +8,16 @@ public class Borrowing {
     LocalDate finish;
     int daysLeft;
     Book book;
-    User user;      
+    User user;
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public Borrowing(Book book, User user) {
-       start = LocalDate.now();
-       finish = start.plusDays(14);
-       Period period = Period.between(start, finish);
-       daysLeft = period.getDays();
-       this.book = book;
-       this.user = user;    
+        start = LocalDate.now();
+        finish = start.plusDays(14);
+        daysLeft = Period.between(start, finish).getDays();
+        this.book = book;
+        this.user = user;
     }
 
     public Borrowing(LocalDate start, LocalDate finish, int daysLeft, Book book, User user) {
@@ -25,4 +27,44 @@ public class Borrowing {
         this.book = book;
         this.user = user;
     }
+
+    public String getStart() {
+        return formatter.format(start);
+    }
+
+    public String getFinish() {
+        return formatter.format(finish);
+    }
+
+    public int getDaysLeft() {
+        return Period.between(start, finish).getDays();
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String toString() {
+        return "Borrowing time: " + start + "\nExpire date: "
+                + finish + "\nDays left: " + daysLeft +
+                "\nBook: " + book + "\nUser: " + user;
+    }
+
+    public String toString2() {
+        return getStart() + "<N/>" + getFinish() + "<N/>" + getDaysLeft()
+                + "<N/>" + book.getName() + "<N/>" + user.getName() + "<N/>";
+    }
+
 }
