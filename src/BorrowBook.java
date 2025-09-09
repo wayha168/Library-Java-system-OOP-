@@ -11,7 +11,18 @@ public class BorrowBook implements IOOperation {
         int i = database.getBook(bookName);
         if (i > -1) {
             Book book = database.getBook(i);
-            if (book.getBrwcopies() > 1) {
+            boolean n = true;
+            for (Borrowing borrowing : database.getAllBorrowings()) {
+                if (borrowing.getBook().getName().matches(bookName) &&
+                        borrowing.getUser().getName().matches(user.getName())) {
+                    n = false;
+                    System.out.println("You have already borrowed this book.");
+                    user.menu(database, user);
+                }
+            }
+
+           if (n){
+             if (book.getBrwcopies() > 1 ) {
                 Borrowing borrowing = new Borrowing(book, user);
                 book.setBrwcopies(book.getBrwcopies() - 1);
                 database.borrowBook(borrowing, book, i);
@@ -21,6 +32,7 @@ public class BorrowBook implements IOOperation {
             } else {
                 System.out.println("The book is no available copies to borrow.");
             }
+           }
         } else {
             System.out.println("Book not found");
         }

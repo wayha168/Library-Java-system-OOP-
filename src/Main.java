@@ -82,6 +82,10 @@ public class Main {
     private static void newUser() {
         System.out.println("Enter name:");
         String name = scanner.next();
+        if (database.userExists(name)) {
+            System.out.println("User already exists. Please log in.");
+            newUser();
+        }
         System.out.println("Enter phone number:");
         String phoneNumber = scanner.next();
         System.out.println("Enter Email:");

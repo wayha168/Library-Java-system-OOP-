@@ -324,6 +324,17 @@ public class Database {
         }
     }
 
+    public boolean userExists(String name) {
+        boolean found = false;
+        for (User user : users) {
+            if (user.getName().toLowerCase().matches(name.toLowerCase())) {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
+
     private User getUserByName(String name) {
         User u = new NormalUser("");
         for (User user : users) {
@@ -407,7 +418,7 @@ public class Database {
         return borrowing;
     }
 
-    void borrowBook(Borrowing borrowing, Book book, int bookIndex) {
+    public void borrowBook(Borrowing borrowing, Book book, int bookIndex) {
         borrowings.add(borrowing);
         books.set(bookIndex, book);
         saveBorrowings();
@@ -417,5 +428,12 @@ public class Database {
     public ArrayList<Borrowing> getAllBorrowings() {
         return borrowings;
     }
-    
+
+    public void returnBook(Borrowing borrowing, Book book, int bookIndex) {
+        borrowings.remove(borrowing);
+        books.set(bookIndex, book);
+        saveBorrowings();
+        saveBooks();
+    }
+
 }
